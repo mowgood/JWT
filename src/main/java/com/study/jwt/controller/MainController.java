@@ -12,4 +12,10 @@ public class MainController {
     public String main() {
         return "main API";
     }
+
+    @GetMapping("/api/member")
+    @Operation(summary = "멤버 API", description = "멤버 API 입니다.")
+    public String member() {
+        return "member API";
+    }
 }

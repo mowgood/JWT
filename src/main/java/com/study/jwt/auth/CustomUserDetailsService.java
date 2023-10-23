@@ -1,7 +1,6 @@
 package com.study.jwt.auth;
 
 import com.study.jwt.domain.Member;
-import com.study.jwt.exception.MemberNotFoundException;
 import com.study.jwt.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +20,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByMemberId(username).orElseThrow(MemberNotFoundException::new);
-
         log.info("CustomDetailsService-----------------------------------");
+
+        Member member = memberRepository.findByMemberId(username).orElseThrow();
 
         return CustomUserDetails.builder()
                 .id(member.getId())
