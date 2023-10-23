@@ -5,4 +5,5 @@
 - MySQL 8.0
 - Spring Boot 3.1.4
 - Spring Security 6.1.4
+- jjwt 0.11.5
 - Swagger 3
