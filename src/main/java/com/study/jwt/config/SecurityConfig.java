@@ -2,7 +2,10 @@ package com.study.jwt.config;
 
 import com.study.jwt.auth.CustomAuthenticationProvider;
 import com.study.jwt.auth.CustomUserDetailsService;
+import com.study.jwt.auth.JwtProvider;
 import com.study.jwt.auth.filter.LoginFilter;
+import com.study.jwt.auth.handler.LoginSuccessHandler;
+import com.study.jwt.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -31,16 +34,20 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
 
-//    private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final JwtProvider jwtProvider;
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        return new CustomAuthenticationProvider(customUserDetailsService, passwordEncoder());
-    }
+    private final MemberRepository memberRepository;
+
+//    private final CustomAuthenticationProvider customAuthenticationProvider;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        return new CustomAuthenticationProvider(customUserDetailsService, passwordEncoder());
     }
 
     @Bean
@@ -71,6 +78,7 @@ public class SecurityConfig {
     private LoginFilter getLoginFilter() {
         LoginFilter loginFilter = new LoginFilter("/auth/login");
         loginFilter.setAuthenticationManager(authenticationManager());
+        loginFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(jwtProvider, memberRepository)); // LoginFilter와 LoginSuccessHandler 연동
 
         return loginFilter;
     }
