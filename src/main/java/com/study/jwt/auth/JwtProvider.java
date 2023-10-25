@@ -90,7 +90,7 @@ public class JwtProvider {
             log.info("Expired JWT Token", e);
             throw e;
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token");
+            log.info("Unsupported JWT Token", e);
             throw e;
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty", e);
@@ -98,9 +98,9 @@ public class JwtProvider {
         return false;
     }
 
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String token) {
         try {
-            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }

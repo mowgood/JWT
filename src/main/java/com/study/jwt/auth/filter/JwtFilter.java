@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
 //            return;
 //        }
 
-        log.info("TokenCheckFilter(AccessToken)-----------------------------------");
+        log.info("JwtFilter(AccessToken)-----------------------------------");
 
         String authorization = request.getHeader("Authorization");
 

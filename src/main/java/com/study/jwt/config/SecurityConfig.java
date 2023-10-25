@@ -72,6 +72,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        log.info("SecurityConfig-----------------------------------");
+
         return http
                 .formLogin(form -> form
                         .disable())
@@ -82,9 +84,10 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용하지 않음
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/main").permitAll()
+                        .requestMatchers("/auth/refreshToken").permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtFilter(jwtProvider, objectMapper), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(getLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(jwtProvider, objectMapper), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(e -> e
                         .accessDeniedHandler(new Http403Handler(objectMapper))
                         .authenticationEntryPoint(new Http401Handler(objectMapper)))
@@ -94,7 +97,7 @@ public class SecurityConfig {
     private LoginFilter getLoginFilter() {
         LoginFilter loginFilter = new LoginFilter(new AntPathRequestMatcher("/auth/login", HttpMethod.POST.name()));
         loginFilter.setAuthenticationManager(authenticationManager());
-        loginFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(jwtProvider, memberRepository, objectMapper));
+        loginFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(jwtProvider, objectMapper));
         loginFilter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
 
         return loginFilter;
