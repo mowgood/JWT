@@ -32,7 +32,9 @@ public class JwtProvider {
     private long accessTokenValidTime;
 
     @Value("${jwt.refresh-token-validity-in-seconds}")
-    private long refreshTokenValidTime;
+    public long refreshTokenValidTime;
+
+    public static final String jwtType = "Bearer ";
 
     @PostConstruct
     protected void init() {

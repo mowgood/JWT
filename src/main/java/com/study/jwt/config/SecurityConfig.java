@@ -97,7 +97,7 @@ public class SecurityConfig {
     private LoginFilter getLoginFilter() {
         LoginFilter loginFilter = new LoginFilter(new AntPathRequestMatcher("/auth/login", HttpMethod.POST.name()));
         loginFilter.setAuthenticationManager(authenticationManager());
-        loginFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(jwtProvider, objectMapper));
+        loginFilter.setAuthenticationSuccessHandler(new LoginSuccessHandler(jwtProvider));
         loginFilter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
 
         return loginFilter;
